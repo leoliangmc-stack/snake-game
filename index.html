@@ -65,6 +65,26 @@
   }
   .scores { display: flex; gap: 18px; font-size: 14px; color: var(--muted); }
   .scores b { color: var(--text); font-weight: 600; margin-left: 6px; }
+  .hud { display: flex; align-items: center; gap: 14px; }
+
+  #pause-btn {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--btn);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #pause-btn:hover { background: var(--btn-active); }
+  #pause-btn:active { transform: scale(0.95); }
+  #pause-btn[data-state="paused"] { background: var(--accent); color: #0f1117; }
 
   #stage {
     position: relative;
@@ -167,9 +187,12 @@
 <div id="app">
   <header>
     <h1>Snake</h1>
-    <div class="scores">
-      <span>Score<b id="score">0</b></span>
-      <span>Best<b id="best">0</b></span>
+    <div class="hud">
+      <div class="scores">
+        <span>Score<b id="score">0</b></span>
+        <span>Best<b id="best">0</b></span>
+      </div>
+      <button id="pause-btn" aria-label="Pause" title="Pause (Space)">&#10074;&#10074;</button>
     </div>
   </header>
 
@@ -193,8 +216,8 @@
     <button class="down" data-dir="down" aria-label="Down">▼</button>
   </div>
 
-  <p class="hint kb">Arrow keys / WASD · Space to pause · Walls wrap around</p>
-  <p class="hint touch">Swipe anywhere on the board · Walls wrap around</p>
+  <p class="hint kb">Arrow keys / WASD · Space to pause · Don't hit the walls</p>
+  <p class="hint touch">Swipe anywhere on the board · Don't hit the walls</p>
 </div>
 
 <script>
@@ -219,6 +242,7 @@
   const scoreEl = document.getElementById('score');
   const bestEl = document.getElementById('best');
   const dpad = document.getElementById('dpad');
+  const pauseBtn = document.getElementById('pause-btn');
 
   const DIRS = {
     up:    { x: 0,  y: -1 },
@@ -291,8 +315,14 @@
     if (dirQueue.length) dir = dirQueue.shift();
 
     const head = snake[0];
-    const nx = (head.x + dir.x + GRID) % GRID;   // wrap around
-    const ny = (head.y + dir.y + GRID) % GRID;
+    const nx = head.x + dir.x;
+    const ny = head.y + dir.y;
+
+    // Hitting a wall ends the game
+    if (nx < 0 || ny < 0 || nx >= GRID || ny >= GRID) {
+      gameOver();
+      return;
+    }
 
     const ate = food && nx === food.x && ny === food.y;
 
@@ -345,17 +375,27 @@
     hideOverlay();
     lastStep = performance.now();
     pulse = 0;
+    syncPauseBtn();
+  }
+  function syncPauseBtn() {
+    const paused = state === 'paused';
+    pauseBtn.dataset.state = paused ? 'paused' : 'playing';
+    pauseBtn.innerHTML = paused ? '&#9654;' : '&#10074;&#10074;';
+    pauseBtn.setAttribute('aria-label', paused ? 'Resume' : 'Pause');
+    pauseBtn.title = paused ? 'Resume (Space)' : 'Pause (Space)';
   }
   function pause() {
     if (state !== 'playing') return;
     state = 'paused';
     showOverlay('Paused', '<p>Take a breath.</p>', 'Resume');
+    syncPauseBtn();
   }
   function resume() {
     if (state !== 'paused') return;
     state = 'playing';
     hideOverlay();
     lastStep = performance.now();
+    syncPauseBtn();
   }
   function togglePause() {
     if (state === 'playing') pause();
@@ -511,6 +551,14 @@
     queueDir(d);
   });
   dpad.addEventListener('contextmenu', e => e.preventDefault());
+
+  // ---------- Header pause button ----------
+  pauseBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    pauseBtn.blur(); // keep Space from re-triggering the button
+    if (state === 'idle' || state === 'over') start();
+    else togglePause();
+  });
 
   // ---------- Overlay button ----------
   ovBtn.addEventListener('click', e => { e.stopPropagation(); primaryAction(); });
