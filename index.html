@@ -31,6 +31,7 @@
     --shadow: 122, 102, 72;
     --font-display: 'Baloo 2', ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif;
     --font-text: 'Nunito', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --k: 1;   /* UI scale, set from the viewport by resize(): 1 on phones, up to 1.4 on big screens */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,32 +100,32 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-             max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    gap: calc(12px * var(--k));
+    padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+             max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
   }
 
   header {
     width: 100%;
-    max-width: 620px;
+    max-width: 900px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
   }
-  .hud { display: flex; gap: 10px; }
-  .controls { display: flex; gap: 8px; }
+  .hud { display: flex; gap: calc(10px * var(--k)); }
+  .controls { display: flex; gap: calc(8px * var(--k)); }
 
   .chip {
-    min-width: 84px;
-    padding: 8px 16px;
+    min-width: calc(84px * var(--k));
+    padding: calc(8px * var(--k)) calc(16px * var(--k));
     border: 2px solid var(--straw);
-    border-radius: 14px;
+    border-radius: calc(14px * var(--k));
     background: var(--cream);
     box-shadow: 0 4px 10px rgba(var(--shadow), 0.1);
   }
   .chip .label {
-    font-size: 10px;
+    font-size: calc(10px * var(--k));
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -133,7 +134,7 @@
   .chip .value {
     display: inline-block;
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: calc(24px * var(--k));
     font-weight: 700;
     line-height: 1.1;
     color: var(--sage-deep);
@@ -143,14 +144,14 @@
   .chip .value.bump { transform: scale(1.14); }
 
   .icon-btn {
-    width: 46px;
-    height: 46px;
+    width: calc(46px * var(--k));
+    height: calc(46px * var(--k));
     border: 2px solid var(--straw);
-    border-radius: 14px;
+    border-radius: calc(14px * var(--k));
     background: var(--cream);
     color: var(--text-2);
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: calc(16px * var(--k));
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(var(--shadow), 0.1);
@@ -159,7 +160,7 @@
     align-items: center;
     justify-content: center;
   }
-  .icon-btn svg { width: 20px; height: 20px; }
+  .icon-btn svg { width: calc(20px * var(--k)); height: calc(20px * var(--k)); }
   .icon-btn:hover { transform: scale(1.06); }
   .icon-btn:active { transform: scale(.96); }
 
@@ -167,10 +168,10 @@
   #stage {
     position: relative;
     width: 100%;
-    max-width: 620px;
+    max-width: 900px;
     aspect-ratio: 1 / 1;
-    padding: 10px;
-    border-radius: 22px;
+    padding: calc(10px * var(--k));
+    border-radius: calc(22px * var(--k));
     background: linear-gradient(var(--wood-a), var(--wood-b));
     box-shadow: 0 16px 36px rgba(var(--shadow), 0.24), inset 0 2px 0 rgba(255, 255, 255, 0.35);
     flex-shrink: 1;
@@ -180,7 +181,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 14px;
+    border-radius: calc(14px * var(--k));
     overflow: hidden;
     background: #CBDFA4;
     display: flex;
@@ -191,7 +192,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 14px;
+    border-radius: calc(14px * var(--k));
     box-shadow: inset 0 0 0 2px rgba(var(--shadow), 0.18);
     pointer-events: none;
   }
@@ -205,7 +206,7 @@
     align-items: center;
     justify-content: center;
     padding: 18px;
-    border-radius: 22px;
+    border-radius: calc(22px * var(--k));
     background: rgba(247, 240, 220, 0.72);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
@@ -217,10 +218,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: calc(14px * var(--k));
     max-width: 100%;
-    padding: 28px 34px;
-    border-radius: 22px;
+    padding: calc(28px * var(--k)) calc(34px * var(--k));
+    border-radius: calc(22px * var(--k));
     background: var(--cream);
     border: 2px solid var(--straw);
     box-shadow: 0 14px 34px rgba(var(--shadow), 0.22);
@@ -229,7 +230,7 @@
   }
   #overlay.hidden .card { animation: none; }
   .card .kicker {
-    font-size: 12px;
+    font-size: calc(12px * var(--k));
     font-weight: 700;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -237,27 +238,27 @@
   }
   .card h2 {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: calc(32px * var(--k));
     font-weight: 700;
     line-height: 1.1;
     color: var(--sage-deep);
   }
   .card .note {
-    font-size: 13px;
+    font-size: calc(13px * var(--k));
     line-height: 1.6;
     color: var(--muted);
     max-width: 30ch;
     text-wrap: pretty;
   }
-  .stats { display: flex; gap: 12px; }
+  .stats { display: flex; gap: calc(12px * var(--k)); }
   .stat {
-    min-width: 112px;
-    padding: 12px 18px;
-    border-radius: 16px;
+    min-width: calc(112px * var(--k));
+    padding: calc(12px * var(--k)) calc(18px * var(--k));
+    border-radius: calc(16px * var(--k));
     background: var(--linen);
   }
   .stat .label {
-    font-size: 10px;
+    font-size: calc(10px * var(--k));
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -265,7 +266,7 @@
   }
   .stat .value {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: calc(32px * var(--k));
     font-weight: 700;
     line-height: 1.1;
     color: var(--sage-deep);
@@ -274,21 +275,21 @@
 
   .btn-row {
     display: flex;
-    gap: 10px;
+    gap: calc(10px * var(--k));
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-top: 2px;
   }
   .btn {
-    padding: 14px 34px;
+    padding: calc(14px * var(--k)) calc(34px * var(--k));
     border: 0;
     border-bottom: 4px solid var(--sage-lip);
     border-radius: 999px;
     background: var(--sage);
     color: var(--cream);
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: calc(20px * var(--k));
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(110, 139, 94, 0.3);
@@ -299,13 +300,13 @@
   .btn.wide { width: 100%; padding: 14px; font-size: 19px; }
 
   .btn-secondary {
-    padding: 13px 22px;
+    padding: calc(13px * var(--k)) calc(22px * var(--k));
     border: 2px solid var(--straw);
     border-radius: 999px;
     background: var(--cream);
     color: var(--text-2);
     font-family: var(--font-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--k));
     font-weight: 700;
     cursor: pointer;
     transition: transform .16s ease, border-color .16s ease;
@@ -445,8 +446,8 @@
   /* Touch D-pad */
   #dpad {
     display: none;
-    grid-template-columns: repeat(3, 62px);
-    grid-template-rows: repeat(2, 56px);
+    grid-template-columns: repeat(3, 72px);
+    grid-template-rows: repeat(2, 62px);
     gap: 8px;
     flex-shrink: 0;
   }
@@ -455,7 +456,7 @@
     border-radius: 16px;
     background: var(--cream);
     color: var(--text-2);
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     touch-action: none;
     box-shadow: 0 4px 10px rgba(var(--shadow), 0.12);
@@ -466,7 +467,7 @@
   #dpad .down  { grid-column: 2; grid-row: 2; }
   #dpad .right { grid-column: 3; grid-row: 2; }
 
-  .hint { font-size: 12px; color: var(--muted); text-align: center; }
+  .hint { font-size: calc(12px * var(--k)); color: var(--muted); text-align: center; }
 
   /* Show D-pad on touch devices; hide keyboard hint */
   @media (pointer: coarse) {
@@ -737,7 +738,13 @@
   }
 
   // ---------- Sizing ----------
+  const header = document.querySelector('header');
+
   function resize() {
+    // Scale the chrome with the screen: phones stay at 1, big monitors get up to 1.4.
+    const k = Math.min(1.4, Math.max(1, Math.min(window.innerWidth, window.innerHeight) / 700));
+    document.documentElement.style.setProperty('--k', k.toFixed(3));
+
     // Let CSS pick the natural size first, then shrink the frame to a square
     // so a short viewport doesn't leave grass margins beside the board.
     stage.style.width = '';
@@ -747,6 +754,7 @@
     if (rect.width - rect.height > 1) {
       stage.style.width = (size + stage.offsetWidth - rect.width) + 'px';
     }
+    header.style.maxWidth = stage.offsetWidth + 'px';
     const dpr = Math.min(window.devicePixelRatio || 1, 3);
     canvas.width = size * dpr;
     canvas.height = size * dpr;
